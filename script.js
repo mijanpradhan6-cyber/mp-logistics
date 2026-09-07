@@ -1,0 +1,16 @@
+let drivers=JSON.parse(localStorage.getItem("drivers"))||[];
+let vehicles=JSON.parse(localStorage.getItem("vehicles"))||[];
+let fuelEntries=JSON.parse(localStorage.getItem("fuelEntries"))||[];
+function saveData(){localStorage.setItem("drivers",JSON.stringify(drivers));localStorage.setItem("vehicles",JSON.stringify(vehicles));localStorage.setItem("fuelEntries",JSON.stringify(fuelEntries))}
+function showPage(page){document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));document.getElementById(page).classList.remove("hidden");updateDashboard()}
+document.getElementById("driverForm").addEventListener("submit",e=>{e.preventDefault();drivers.push({name:driverName.value,phone:driverPhone.value,license:license.value,joining:joiningDate.value,status:driverStatus.value});saveData();e.target.reset();displayDrivers();updateDashboard()});
+function displayDrivers(){driverList.innerHTML=drivers.map((d,i)=>`<div class="item"><h3>${d.name}</h3><p>📞 ${d.phone}</p><p>🪪 License: ${d.license}</p><p>📅 Joining: ${d.joining}</p><p>🔵 Status: ${d.status}</p><button class="delete" onclick="deleteDriver(${i})">Delete</button></div>`).join("")}
+function deleteDriver(i){drivers.splice(i,1);saveData();displayDrivers();updateDashboard()}
+document.getElementById("vehicleForm").addEventListener("submit",e=>{e.preventDefault();vehicles.push({number:vehicleNumber.value,type:vehicleType.value,model:vehicleModel.value,fuel:fuelType.value,status:vehicleStatus.value});saveData();e.target.reset();displayVehicles();updateDashboard()});
+function displayVehicles(){vehicleList.innerHTML=vehicles.map((v,i)=>`<div class="item"><h3>🚚 ${v.number}</h3><p>Type: ${v.type}</p><p>Model: ${v.model}</p><p>Fuel: ${v.fuel}</p><p>Status: ${v.status}</p><button class="delete" onclick="deleteVehicle(${i})">Delete</button></div>`).join("")}
+function deleteVehicle(i){vehicles.splice(i,1);saveData();displayVehicles();updateDashboard()}
+document.getElementById("fuelForm").addEventListener("submit",e=>{e.preventDefault();let q=Number(fuelQuantity.value),r=Number(fuelRate.value);fuelEntries.push({date:fuelDate.value,vehicle:fuelVehicle.value,type:fuelKind.value,quantity:q,rate:r,total:q*r,odometer:odometer.value,driver:fuelDriver.value});saveData();e.target.reset();displayFuel();updateDashboard()});
+function displayFuel(){fuelList.innerHTML=fuelEntries.map((f,i)=>`<div class="item"><h3>⛽ ${f.type}</h3><p>📅 ${f.date}</p><p>🚚 Vehicle: ${f.vehicle}</p><p>📦 Quantity: ${f.quantity}</p><p>💰 Rate: ₹${f.rate}</p><p><b>Total: ₹${f.total.toFixed(2)}</b></p><p>🛣️ Odometer: ${f.odometer}</p><p>👨‍✈️ Driver: ${f.driver}</p><button class="delete" onclick="deleteFuel(${i})">Delete</button></div>`).join("")}
+function deleteFuel(i){fuelEntries.splice(i,1);saveData();displayFuel();updateDashboard()}
+function updateDashboard(){driverCount.innerText=drivers.length;vehicleCount.innerText=vehicles.length;fuelCount.innerText=fuelEntries.length;fuelTotal.innerText=fuelEntries.reduce((s,x)=>s+Number(x.total),0).toFixed(2)}
+displayDrivers();displayVehicles();displayFuel();updateDashboard();

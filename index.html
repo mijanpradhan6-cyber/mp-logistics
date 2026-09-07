@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MP Logistics</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header><h1>🚚 MP Logistics</h1><p>Transport Management System</p></header>
+<nav>
+<button onclick="showPage('dashboard')">Dashboard</button>
+<button onclick="showPage('drivers')">Drivers</button>
+<button onclick="showPage('vehicles')">Vehicles</button>
+<button onclick="showPage('fuel')">CNG / Diesel</button>
+</nav>
+<main>
+<section id="dashboard" class="page">
+<h2>Dashboard</h2>
+<div class="cards">
+<div class="card"><h3>Drivers</h3><p id="driverCount">0</p></div>
+<div class="card"><h3>Vehicles</h3><p id="vehicleCount">0</p></div>
+<div class="card"><h3>Fuel Entries</h3><p id="fuelCount">0</p></div>
+<div class="card"><h3>Total Fuel Expense</h3><p>₹<span id="fuelTotal">0</span></p></div>
+</div></section>
+
+<section id="drivers" class="page hidden"><h2>👨‍✈️ Driver Details</h2>
+<form id="driverForm">
+<input id="driverName" placeholder="Driver Name" required>
+<input id="driverPhone" placeholder="Mobile Number" required>
+<input id="license" placeholder="License Number" required>
+<input id="joiningDate" type="date" required>
+<select id="driverStatus"><option>Available</option><option>On Trip</option><option>Off Duty</option></select>
+<button type="submit">Add Driver</button>
+</form><div id="driverList"></div></section>
+
+<section id="vehicles" class="page hidden"><h2>🚛 Vehicle Details</h2>
+<form id="vehicleForm">
+<input id="vehicleNumber" placeholder="Vehicle Number" required>
+<input id="vehicleType" placeholder="Vehicle Type" required>
+<input id="vehicleModel" placeholder="Vehicle Model">
+<select id="fuelType"><option>CNG</option><option>Diesel</option></select>
+<select id="vehicleStatus"><option>Available</option><option>On Trip</option><option>Maintenance</option></select>
+<button type="submit">Add Vehicle</button>
+</form><div id="vehicleList"></div></section>
+
+<section id="fuel" class="page hidden"><h2>⛽ CNG / Diesel Entry</h2>
+<form id="fuelForm">
+<input id="fuelDate" type="date" required>
+<input id="fuelVehicle" placeholder="Vehicle Number" required>
+<select id="fuelKind"><option>CNG</option><option>Diesel</option></select>
+<input id="fuelQuantity" type="number" step="0.01" placeholder="Quantity (KG/L)" required>
+<input id="fuelRate" type="number" step="0.01" placeholder="Rate" required>
+<input id="odometer" type="number" placeholder="Odometer Reading">
+<input id="fuelDriver" placeholder="Driver Name">
+<button type="submit">Save Fuel Entry</button>
+</form><div id="fuelList"></div></section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
