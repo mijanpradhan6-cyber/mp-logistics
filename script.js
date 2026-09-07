@@ -1,16 +1,489 @@
-let drivers=JSON.parse(localStorage.getItem("drivers"))||[];
-let vehicles=JSON.parse(localStorage.getItem("vehicles"))||[];
-let fuelEntries=JSON.parse(localStorage.getItem("fuelEntries"))||[];
-function saveData(){localStorage.setItem("drivers",JSON.stringify(drivers));localStorage.setItem("vehicles",JSON.stringify(vehicles));localStorage.setItem("fuelEntries",JSON.stringify(fuelEntries))}
-function showPage(page){document.querySelectorAll(".page").forEach(p=>p.classList.add("hidden"));document.getElementById(page).classList.remove("hidden");updateDashboard()}
-document.getElementById("driverForm").addEventListener("submit",e=>{e.preventDefault();drivers.push({name:driverName.value,phone:driverPhone.value,license:license.value,joining:joiningDate.value,status:driverStatus.value});saveData();e.target.reset();displayDrivers();updateDashboard()});
-function displayDrivers(){driverList.innerHTML=drivers.map((d,i)=>`<div class="item"><h3>${d.name}</h3><p>📞 ${d.phone}</p><p>🪪 License: ${d.license}</p><p>📅 Joining: ${d.joining}</p><p>🔵 Status: ${d.status}</p><button class="delete" onclick="deleteDriver(${i})">Delete</button></div>`).join("")}
-function deleteDriver(i){drivers.splice(i,1);saveData();displayDrivers();updateDashboard()}
-document.getElementById("vehicleForm").addEventListener("submit",e=>{e.preventDefault();vehicles.push({number:vehicleNumber.value,type:vehicleType.value,model:vehicleModel.value,fuel:fuelType.value,status:vehicleStatus.value});saveData();e.target.reset();displayVehicles();updateDashboard()});
-function displayVehicles(){vehicleList.innerHTML=vehicles.map((v,i)=>`<div class="item"><h3>🚚 ${v.number}</h3><p>Type: ${v.type}</p><p>Model: ${v.model}</p><p>Fuel: ${v.fuel}</p><p>Status: ${v.status}</p><button class="delete" onclick="deleteVehicle(${i})">Delete</button></div>`).join("")}
-function deleteVehicle(i){vehicles.splice(i,1);saveData();displayVehicles();updateDashboard()}
-document.getElementById("fuelForm").addEventListener("submit",e=>{e.preventDefault();let q=Number(fuelQuantity.value),r=Number(fuelRate.value);fuelEntries.push({date:fuelDate.value,vehicle:fuelVehicle.value,type:fuelKind.value,quantity:q,rate:r,total:q*r,odometer:odometer.value,driver:fuelDriver.value});saveData();e.target.reset();displayFuel();updateDashboard()});
-function displayFuel(){fuelList.innerHTML=fuelEntries.map((f,i)=>`<div class="item"><h3>⛽ ${f.type}</h3><p>📅 ${f.date}</p><p>🚚 Vehicle: ${f.vehicle}</p><p>📦 Quantity: ${f.quantity}</p><p>💰 Rate: ₹${f.rate}</p><p><b>Total: ₹${f.total.toFixed(2)}</b></p><p>🛣️ Odometer: ${f.odometer}</p><p>👨‍✈️ Driver: ${f.driver}</p><button class="delete" onclick="deleteFuel(${i})">Delete</button></div>`).join("")}
-function deleteFuel(i){fuelEntries.splice(i,1);saveData();displayFuel();updateDashboard()}
-function updateDashboard(){driverCount.innerText=drivers.length;vehicleCount.innerText=vehicles.length;fuelCount.innerText=fuelEntries.length;fuelTotal.innerText=fuelEntries.reduce((s,x)=>s+Number(x.total),0).toFixed(2)}
-displayDrivers();displayVehicles();displayFuel();updateDashboard();
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #14233b;
+  background: white;
+}
+
+/* HEADER */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+
+  height: 76px;
+
+  background: white;
+
+  border-bottom: 1px solid #e8ebef;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 7%;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  text-decoration: none;
+  color: #14233b;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+
+  border-radius: 10px;
+
+  background: #f28b22;
+  color: white;
+
+  display: grid;
+  place-items: center;
+
+  font-weight: 900;
+  font-size: 19px;
+}
+
+.brand strong {
+  display: block;
+  font-size: 15px;
+}
+
+.brand small {
+  display: block;
+  color: #788494;
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+/* NAVIGATION */
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 23px;
+}
+
+nav a {
+  color: #26364e;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+nav a:hover {
+  color: #f28b22;
+}
+
+.menu {
+  display: none;
+  border: 0;
+  background: none;
+  font-size: 25px;
+}
+
+/* HERO */
+
+.hero {
+  min-height: 520px;
+
+  padding: 75px 9%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background:
+    linear-gradient(
+      110deg,
+      white 55%,
+      #f5f7f9
+    );
+}
+
+.hero-text {
+  max-width: 650px;
+}
+
+.tag {
+  color: #f28b22;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.hero h1 {
+  font-size: 54px;
+  line-height: 1.04;
+  margin: 15px 0;
+}
+
+.hero h1 span {
+  color: #f28b22;
+}
+
+.hero p:not(.tag) {
+  color: #657286;
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.btn {
+  display: inline-block;
+
+  text-decoration: none;
+
+  background: #f28b22;
+  color: white;
+
+  padding: 13px 19px;
+
+  border-radius: 8px;
+
+  font-weight: 700;
+}
+
+.btn.dark {
+  background: #14233b;
+}
+
+.truck {
+  font-size: 175px;
+  padding: 40px;
+}
+
+/* STATS */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  background: #14233b;
+}
+
+.stats div {
+  padding: 28px;
+
+  text-align: center;
+
+  color: white;
+}
+
+.stats b {
+  display: block;
+
+  color: #f6a044;
+
+  font-size: 28px;
+}
+
+.stats span {
+  font-size: 13px;
+  color: #d9e0e8;
+}
+
+/* SECTIONS */
+
+.section {
+  padding: 75px 9%;
+  text-align: center;
+}
+
+.section h2,
+.track h2 {
+  font-size: 34px;
+  margin: 10px 0 15px;
+}
+
+.lead {
+  max-width: 780px;
+
+  margin: auto;
+
+  color: #657286;
+
+  line-height: 1.7;
+}
+
+/* SERVICES */
+
+.services {
+  background: #fafbfc;
+}
+
+.cards {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 18px;
+
+  margin-top: 35px;
+}
+
+.cards article {
+  background: white;
+
+  border: 1px solid #e6ebf0;
+
+  border-radius: 14px;
+
+  padding: 26px;
+
+  text-align: left;
+
+  box-shadow:
+    0 7px 25px
+    rgba(20, 35, 59, .06);
+}
+
+.icon {
+  font-size: 34px;
+}
+
+.cards h3 {
+  margin: 15px 0 8px;
+}
+
+.cards p {
+  color: #687588;
+  line-height: 1.55;
+}
+
+/* TRACKING */
+
+.track {
+  background: #f2f5f8;
+
+  text-align: center;
+
+  padding: 65px 9%;
+}
+
+.track > p:not(.tag) {
+  color: #687588;
+}
+
+.track-box {
+  display: flex;
+
+  max-width: 620px;
+
+  margin: 25px auto 12px;
+}
+
+.track-box input {
+  flex: 1;
+
+  padding: 15px;
+
+  border: 1px solid #ccd5df;
+
+  border-radius: 8px 0 0 8px;
+
+  font-size: 16px;
+
+  outline: none;
+}
+
+.track-box button {
+  border: 0;
+
+  background: #f28b22;
+
+  color: white;
+
+  padding: 0 25px;
+
+  border-radius: 0 8px 8px 0;
+
+  font-weight: 800;
+
+  font-size: 15px;
+}
+
+.notice {
+  max-width: 620px;
+
+  margin: auto;
+
+  padding: 14px;
+
+  border-radius: 8px;
+
+  background: white;
+
+  border: 1px solid #dce2e8;
+
+  color: #44536a;
+}
+
+/* CONTACT */
+
+.contact {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 18px;
+
+  margin-top: 30px;
+}
+
+.contact div {
+  background: #f7f8fa;
+
+  padding: 24px;
+
+  border-radius: 12px;
+}
+
+.contact p {
+  color: #687588;
+}
+
+/* FOOTER */
+
+footer {
+  background: #101d31;
+
+  color: white;
+
+  text-align: center;
+
+  padding: 25px;
+
+  font-size: 13px;
+}
+
+/* MOBILE */
+
+@media (max-width: 850px) {
+
+  .header {
+    height: auto;
+    padding: 13px 5%;
+  }
+
+  .menu {
+    display: block;
+  }
+
+  nav {
+    display: none;
+
+    position: absolute;
+
+    top: 70px;
+    left: 0;
+    right: 0;
+
+    background: white;
+
+    padding: 12px 5%;
+
+    box-shadow:
+      0 8px 20px
+      rgba(0,0,0,.08);
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 0;
+  }
+
+  nav.show {
+    display: flex;
+  }
+
+  nav a {
+    padding: 12px 0;
+    width: 100%;
+  }
+
+  .hero {
+    padding: 55px 7%;
+    min-height: auto;
+  }
+
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .truck {
+    font-size: 100px;
+    padding: 10px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .contact {
+    grid-template-columns: 1fr;
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .hero {
+    display: block;
+  }
+
+  .hero h1 {
+    font-size: 38px;
+  }
+
+  .truck {
+    text-align: center;
+    font-size: 85px;
+  }
+
+  .stats,
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .section {
+    padding: 55px 7%;
+  }
+
+  .track {
+    padding: 55px 7%;
+  }
+
+  .track-box input {
+    min-width: 0;
+  }
+
+  .track-box button {
+    padding: 0 17px;
+  }
+}
