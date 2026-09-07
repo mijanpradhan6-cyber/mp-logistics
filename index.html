@@ -1,61 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MP Logistics</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M.P. Logistics | Transport & Logistics</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<header><h1>🚚 MP Logistics</h1><p>Transport Management System</p></header>
-<nav>
-<button onclick="showPage('dashboard')">Dashboard</button>
-<button onclick="showPage('drivers')">Drivers</button>
-<button onclick="showPage('vehicles')">Vehicles</button>
-<button onclick="showPage('fuel')">CNG / Diesel</button>
-</nav>
-<main>
-<section id="dashboard" class="page">
-<h2>Dashboard</h2>
-<div class="cards">
-<div class="card"><h3>Drivers</h3><p id="driverCount">0</p></div>
-<div class="card"><h3>Vehicles</h3><p id="vehicleCount">0</p></div>
-<div class="card"><h3>Fuel Entries</h3><p id="fuelCount">0</p></div>
-<div class="card"><h3>Total Fuel Expense</h3><p>₹<span id="fuelTotal">0</span></p></div>
-</div></section>
 
-<section id="drivers" class="page hidden"><h2>👨‍✈️ Driver Details</h2>
-<form id="driverForm">
-<input id="driverName" placeholder="Driver Name" required>
-<input id="driverPhone" placeholder="Mobile Number" required>
-<input id="license" placeholder="License Number" required>
-<input id="joiningDate" type="date" required>
-<select id="driverStatus"><option>Available</option><option>On Trip</option><option>Off Duty</option></select>
-<button type="submit">Add Driver</button>
-</form><div id="driverList"></div></section>
+<header class="header">
+  <a class="brand" href="#home">
+    <div class="logo">MP</div>
+    <div>
+      <strong>M.P. LOGISTICS</strong>
+      <small>Transport & Logistics</small>
+    </div>
+  </a>
 
-<section id="vehicles" class="page hidden"><h2>🚛 Vehicle Details</h2>
-<form id="vehicleForm">
-<input id="vehicleNumber" placeholder="Vehicle Number" required>
-<input id="vehicleType" placeholder="Vehicle Type" required>
-<input id="vehicleModel" placeholder="Vehicle Model">
-<select id="fuelType"><option>CNG</option><option>Diesel</option></select>
-<select id="vehicleStatus"><option>Available</option><option>On Trip</option><option>Maintenance</option></select>
-<button type="submit">Add Vehicle</button>
-</form><div id="vehicleList"></div></section>
+  <button class="menu" onclick="toggleMenu()">☰</button>
 
-<section id="fuel" class="page hidden"><h2>⛽ CNG / Diesel Entry</h2>
-<form id="fuelForm">
-<input id="fuelDate" type="date" required>
-<input id="fuelVehicle" placeholder="Vehicle Number" required>
-<select id="fuelKind"><option>CNG</option><option>Diesel</option></select>
-<input id="fuelQuantity" type="number" step="0.01" placeholder="Quantity (KG/L)" required>
-<input id="fuelRate" type="number" step="0.01" placeholder="Rate" required>
-<input id="odometer" type="number" placeholder="Odometer Reading">
-<input id="fuelDriver" placeholder="Driver Name">
-<button type="submit">Save Fuel Entry</button>
-</form><div id="fuelList"></div></section>
-</main>
-<script src="script.js"></script>
+  <nav id="nav">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#track">Track Shipment</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<section id="home" class="hero">
+  <div class="hero-text">
+    <p class="tag">RELIABLE • FAST • SECURE</p>
+
+    <h1>
+      Moving Your Business
+      <span>Forward.</span>
+    </h1>
+
+    <p>
+      Professional transport and logistics solutions
+      for businesses across India.
+    </p>
+
+    <div class="buttons">
+      <a class="btn" href="#track">Track Shipment</a>
+      <a class="btn dark" href="#contact">Get a Quote</a>
+    </div>
+  </div>
+
+  <div class="truck">🚚</div>
+</section>
+
+<section class="stats">
+  <div><b>24/7</b><span>Support</span></div>
+  <div><b>100+</b><span>Trips Managed</span></div>
+  <div><b>Fast</b><span>Delivery Network</span></div>
+  <div><b>Safe</b><span>Secure Handling</span></div>
+</section>
+
+<section id="about" class="section">
+  <p class="tag">ABOUT US</p>
+
+  <h2>Trusted Logistics Partner</h2>
+
+  <p class="lead">
+    M.P. Logistics provides dependable transportation
+    and fleet-management solutions with a focus on
+    timely delivery, safe handling and clear communication.
+  </p>
+</section>
+
+<section id="services" class="section services">
+  <p class="tag">WHAT WE DO</p>
+
+  <h2>Our Services</h2>
+
+  <div class="cards">
+
+    <article>
+      <div class="icon">🚛</div>
+      <h3>Full Truck Load</h3>
+      <p>Dedicated vehicle solutions for large shipments.</p>
+    </article>
+
+    <article>
+      <div class="icon">📦</div>
+      <h3>Part Truck Load</h3>
+      <p>Flexible transport for smaller consignments.</p>
+    </article>
+
+    <article>
+      <div class="icon">🏙️</div>
+      <h3>Local Transport</h3>
+      <p>Reliable city and nearby-area delivery support.</p>
+    </article>
+
+    <article>
+      <div class="icon">📊</div>
+      <h3>Fleet Management</h3>
+      <p>Organized trip, driver and vehicle management.</p>
+    </article>
+
+  </div>
+</section>
+
+<section id="track" class="track">
+
+  <p class="tag">SHIPMENT TRACKING</p>
+
+  <h2>Track Your Shipment</h2>
+
+  <p>Enter your LR / shipment number.</p>
+
+  <div class="track-box">
+    <input
+      id="lr"
+      type="text"
+      placeholder="e.g. MPL12345"
+    >
+
+    <button onclick="trackShipment()">Track</button>
+  </div>
+
+  <div id="result"></div>
+
+</section>
+
+<section id="contact" class="section">
+
+  <p class="tag">GET IN TOUCH</p>
+
+  <h2>Contact M.P. Logistics</h2>
+
+  <div class="contact">
+
+    <div>
+      <b>📞 Phone</b>
+      <p>+91 XXXXX XXXXX</p>
+    </div>
+
+    <div>
+      <b>💬 WhatsApp</b>
+      <p>Chat with our team</p>
+    </div>
+
+    <div>
+      <b>✉️ Email</b>
+      <p>info@mplogistics.example</p>
+    </div>
+
+  </div>
+
+</section>
+
+<footer>
+  © 2026 M.P. Logistics • Transport & Logistics
+</footer>
+
+<script>
+
+function toggleMenu() {
+  document.getElementById("nav").classList.toggle("show");
+}
+
+function trackShipment() {
+
+  const lr = document.getElementById("lr").value.trim();
+
+  const result = document.getElementById("result");
+
+  if (!lr) {
+    result.innerHTML =
+      '<div class="notice">Please enter your LR / shipment number.</div>';
+    return;
+  }
+
+  result.innerHTML =
+    '<div class="notice">Shipment <b>' +
+    lr +
+    '</b> received. Live status will appear here after backend connection.</div>';
+}
+
+</script>
+
 </body>
 </html>
